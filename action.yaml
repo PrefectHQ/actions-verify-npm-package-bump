@@ -15,9 +15,11 @@ runs:
       run: |
         if [ "$(jq .version ./package.json | tr -d '"')" != "$(git tag --sort=committerdate | grep -E '[0-9]' | tail -1)" ]; then
           echo "Release version does not match latest tag. Proceeding with release."
-          echo "release=true" >> "$GITHUB_OUTPUT"
+          echo "release=true" >> $GITHUB_OUTPUT
+          echo "$GITHUB_OUTPUT"
         else
           echo "Release version matches latest tag. Not going to proceed with release."
-          echo "release=false" >> "$GITHUB_OUTPUT"
+          echo "release=false" >> $GITHUB_OUTPUT
+          echo "$GITHUB_OUTPUT"
         fi
       shell: bash
