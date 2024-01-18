@@ -27,7 +27,9 @@ jobs:
         with:
           fetch_depth: 0
 
-      - uses: actions-verify-npm-package-bump@main
+      - name: Verify Release
+        id: verify-release
+        uses: prefecthq/actions-verify-npm-package-bump@main
   release:
     name: Release UI Component
     needs: verify_release
