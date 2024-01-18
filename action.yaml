@@ -1,0 +1,23 @@
+---
+name: actions-verify-npm-package-bump
+description: |
+  Verifies that the version in package.json does not match the latest tag.
+outputs:
+  release:
+    description: |
+      Whether or not to proceed with the release.
+    value: ${{ steps.verify-release.outputs.release }}
+runs:
+  using: composite
+  steps:
+    - name: Verify Release
+      id: verify-release
+      run: |
+        if [ "$(jq .version ./package.json | tr -d '"')" != "$(git tag --sort=committerdate | grep -E '[0-9]' | tail -1)" ]; then
+          echo "Release version does not match latest tag. Proceeding with release."
+          echo "release=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "Release version matches latest tag. Not going to proceed with release."
+          echo "release=false" >> "$GITHUB_OUTPUT"
+        fi
+      shell: bash
